@@ -11,6 +11,9 @@ public class CanvasMover : MonoBehaviour
         {
             transform.LookAt(Cameraa.transform.position);
             transform.rotation *= Quaternion.Euler(0, 180f, 0);
+        } else
+        {
+            Cameraa = FindAnyObjectByType<Camera>().gameObject;
         }
     }
 }

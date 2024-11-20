@@ -30,6 +30,7 @@ public class BallJump : MonoBehaviour
     {
         currentspeed = rb.velocity.magnitude;
     }
+    float LogTimer = 0f;
     void Update()
     {
         if (currentspeed > speedmaxtocheck)
@@ -43,8 +44,13 @@ public class BallJump : MonoBehaviour
         else
         {
             inrangetimer += Time.deltaTime;
-            Debug.Log(inrangetimer);
-            ColorBall();
+            LogTimer += Time.deltaTime;
+            if (LogTimer > 0.5f) // to prevent debug spam.
+            {
+                LogTimer = 0f;
+                Debug.Log(inrangetimer);
+                ColorBall();
+            }
         }
     }
 }
