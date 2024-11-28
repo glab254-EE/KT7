@@ -3,21 +3,23 @@ using UnityEngine.UI;
 
 public class RoomClass : MonoBehaviour {
 
-    [SerializeField] private int RoomNumber;
-    [SerializeField] public string PersonInRoom { get; protected internal set; }
-    [SerializeField] public bool HaveAnimal { get; protected internal set; }
+    public int RoomNumber = 0;
+    public string PersonInRoom;
+    public bool HaveAnimal;
     [SerializeField] private TMPro.TMP_InputField RoomNumInput;
     [SerializeField] private TMPro.TMP_InputField PersonNameInput;
     [SerializeField] private UnityEngine.UI.Toggle ToggleAnimal;
-    int oldnum;
+    [SerializeField] private TMPro.TMP_Text RoomNAmeText;
+    [SerializeField] private TMPro.TMP_Text RommNumberText;
+
     private void ChangeRoomNum(string text)
     {
-        if (int.TryParse(text, out int newnum) == true)
+        if (int.TryParse(text, out int newnum) == true && issetupcmplt)
         {
             RoomNumber = newnum;
-            oldnum = RoomNumber;
+            gameObject.name = text;
         }
-        RoomNumInput.text = oldnum.ToString();
+        RommNumberText.text = $"{RoomNumber}";
     }
     private void OnPersonEdit(string text)
     {
@@ -27,11 +29,19 @@ public class RoomClass : MonoBehaviour {
     {
         HaveAnimal = value;
     }
+    bool issetupcmplt;
+    private void FixedUpdate()
+    {
+        if (issetupcmplt)
+        {
+            RommNumberText.text = $"{RoomNumber}";
+            PersonNameInput.text = PersonInRoom;
+            ToggleAnimal.isOn = HaveAnimal;
+        }
+    }
     private void Start()
     {
-        RoomNumber = 0;
-        oldnum = RoomNumber;
-        RoomNumInput.text = oldnum.ToString();
+        RommNumberText.text = "0";
         PersonNameInput.text = PersonInRoom;
         RoomNumInput.onEndEdit.AddListener(ChangeRoomNum);
         PersonNameInput.onEndEdit.AddListener(OnPersonEdit);
@@ -39,10 +49,11 @@ public class RoomClass : MonoBehaviour {
     }
     public void SetUpR(int SettedRoomNum, string[] PeopleNames)
     {
-        if (SettedRoomNum > 0) RoomNumber = SettedRoomNum;
+        RoomNumber = SettedRoomNum;
         if (PeopleNames != null && PeopleNames.Length > 0) PersonInRoom = PeopleNames[UnityEngine.Random.Range(0, PeopleNames.Length)];
         HaveAnimal = UnityEngine.Random.Range(0, 10) > 6;
         ToggleAnimal.isOn = HaveAnimal;
-        oldnum = RoomNumber;
+        RoomNumInput.text = $"{SettedRoomNum}";
+        issetupcmplt = true;
     }
 }
